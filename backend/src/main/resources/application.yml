@@ -1,0 +1,100 @@
+server:
+  port: 9905
+  forward-headers-strategy: framework
+
+spring:
+  application:
+    name: backend
+  messages:
+    basename: "messages/messages"
+    encoding: "UTF-8"
+  datasource:
+    url: jdbc:postgresql://localhost:5432/movies
+    username: postgres
+    password: postgres
+
+  liquibase:
+    enabled: true
+    contexts: dev
+    drop-first: true
+
+  jpa:
+    open-in-view: false
+    generate-ddl: false
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+
+  servlet:
+    multipart:
+      max-file-size: 12MB
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+  instance:
+    preferIpAddress: true
+    instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.int(1000)}}}
+
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info,metrics,health,prometheus
+  endpoint:
+    health:
+      show-components: always
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
+        resilience4j:
+          circuitbreaker:
+            calls: true
+  health:
+    circuitbreakers:
+      enabled: true
+
+jwt:
+  key: c2VjdXJpdHlLZXlGb3JITUFDLVNIQUJhc2U2NEVuY29kZWQ=
+  expirationSec: 7200 # 2h
+  issuer: localhost
+  audience: localhost
+
+aws:
+  endpointUrl: http://127.0.0.1:9000
+  accessKey: minioadmin
+  secretKey: minioadmin
+  bucketName: movies-online
+  region: aws-global
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        register-health-indicator: true
+        sliding-window-size: 100
+        failure-rate-threshold: 50
+        slow-call-duration-threshold: 500
+    instances:
+      getMovie:
+        base-config: default
+        ignore-exceptions:
+          - io.github.maxixcom.otus.movies.backend.exception.MovieNotFoundException
+      rateMovie:
+        base-config: default
+        ignore-exceptions:
+          - io.github.maxixcom.otus.movies.backend.exception.MovieNotFoundException

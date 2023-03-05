@@ -1,0 +1,4 @@
+rootProject.name = "movies-online"
+include("eureka")
+include("gateway")
+include("backend")

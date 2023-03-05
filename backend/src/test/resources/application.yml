@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH
+
+  liquibase:
+    enabled: false
+    contexts: test
+
+
+jwt:
+  key: c2VjdXJpdHlLZXlGb3JITUFDLVNIQUJhc2U2NEVuY29kZWQ=
+  expirationSec: 3600 # 1h
+  issuer: localhost
+  audience: localhost

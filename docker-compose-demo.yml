@@ -1,0 +1,51 @@
+version: '3'
+services:
+  eureka:
+    image: movies-online/eureka:master
+    ports:
+      - "${DEMO_EUREKA_PORT}:8761"
+    networks:
+      - nw
+
+  gateway:
+    image: movies-online/gateway:master
+    environment:
+      - EUREKA_URL=http://eureka:8761/eureka
+    ports:
+      - "${DEMO_GATEWAY_PORT}:9900"
+    networks:
+      - nw
+
+  backend-1:
+    image: movies-online/backend:master
+    environment:
+      - EUREKA_URL=http://eureka:8761/eureka
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/movies
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - AWS_ENDPOINT_URL=http://minio:9000
+    networks:
+      - nw
+
+  backend-2:
+    image: movies-online/backend:master
+    environment:
+      - EUREKA_URL=http://eureka:8761/eureka
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/movies
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - AWS_ENDPOINT_URL=http://minio:9000
+    networks:
+      - nw
+
+  frontend:
+    image: movies-online/frontend
+    environment:
+      - VUE_APP_API_URL=http://localhost:19900/backend
+      - VUE_APP_CDN_URL=http://localhost:9000/movies-online
+    ports:
+      - "${DEMO_FRONTEND_PORT}:80"
+    networks:
+      - nw

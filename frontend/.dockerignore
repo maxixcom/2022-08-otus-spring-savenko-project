@@ -1,0 +1,7 @@
+.git
+.idea
+.gitignore
+.dockerignore
+node_modules
+Dockerfile*
+Makefile

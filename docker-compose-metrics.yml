@@ -1,0 +1,28 @@
+version: '3'
+services:
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "${GRAFANA_PORT}:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./demo/grafana/provisioning/:/etc/grafana/provisioning/
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    networks:
+      - nw
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "${PROMETHEUS_PORT}:9090"
+    volumes:
+      - prometheus-data:/prometheus
+      - ./demo/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - nw
+
+volumes:
+  prometheus-data:
+  grafana-data:
