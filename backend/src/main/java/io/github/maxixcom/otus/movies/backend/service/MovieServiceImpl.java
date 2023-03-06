@@ -101,7 +101,6 @@ public class MovieServiceImpl implements MovieService {
                 .flatMap(categoryRepository::findById)
                 .ifPresent(movie::setCategory);
 
-        // TODO:
         movie.setEmbedCode(sanitizeEmbedCode(movieCreateDto.getEmbedCode()));
 
         Movie storedMovie = movieRepository.save(movie);
@@ -125,7 +124,6 @@ public class MovieServiceImpl implements MovieService {
                 .flatMap(categoryRepository::findById)
                 .ifPresentOrElse(movie::setCategory, () -> movie.setCategory(null));
 
-        // TODO:
         movie.setEmbedCode(sanitizeEmbedCode(movieEditDto.getEmbedCode()));
 
         Movie storedMovie = movieRepository.save(movie);
