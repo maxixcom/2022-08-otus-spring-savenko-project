@@ -1,0 +1,3 @@
+insert into t_user(id, username, password, role, full_name)
+values (1, 'user', '{bcrypt}$2a$12$Po21S8l7k6No3wP0p80.4ezH88qTca.V2LP3bx0p917Y0HmB0.UjG', 'USER', 'User'),
+       (2, 'admin', '{bcrypt}$2a$12$Po21S8l7k6No3wP0p80.4ezH88qTca.V2LP3bx0p917Y0HmB0.UjG', 'ADMIN', 'Administrator');

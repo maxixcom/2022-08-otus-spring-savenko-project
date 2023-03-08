@@ -1,0 +1,90 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2023-02-09--0002--movie-seq
+      author: maxix
+      changes:
+        - createSequence:
+            sequenceName: seq_movie_id
+            dataType: bigint
+            startValue: 100
+
+  - changeSet:
+      id: 2023-02-09--0002--movie-table
+      author: maxix
+      changes:
+        - createTable:
+            tableName: t_movie
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  defaultValueSequenceNext: seq_movie_id
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_movie
+              - column:
+                  name: title
+                  type: varchar(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(5000)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: rating_count
+                  type: bigint
+                  constraints:
+                    nullable: false
+                  defaultValueNumeric: '0'
+              - column:
+                  name: rating_sum
+                  type: bigint
+                  constraints:
+                    nullable: false
+                  defaultValueNumeric: '0'
+              - column:
+                  name: rating
+                  type: decimal(3,1)
+                  constraints:
+                    nullable: false
+                  defaultValueNumeric: '0'
+              - column:
+                  name: embed_code
+                  type: varchar(2400)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: category_id
+                  type: bigint
+              - column:
+                  name: has_poster
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+  - changeSet:
+      id: 2023-02-09--0002--movie-idx-fk-category
+      author: maxix
+      changes:
+        - createIndex:
+            columns:
+              - column:
+                  name: category_id
+            indexName: idx_fk_movie_category
+            tableName: t_movie
+
+  - changeSet:
+      id: 2023-02-09--0002--movie-fk-category
+      author: maxix
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: category_id
+            baseTableName: t_movie
+            constraintName: fk_movie_category
+            onDelete: SET NULL
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: t_category

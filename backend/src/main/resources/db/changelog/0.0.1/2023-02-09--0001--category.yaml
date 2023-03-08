@@ -1,0 +1,42 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2023-02-09--0001--category-seq
+      author: maxix
+      changes:
+        - createSequence:
+            sequenceName: seq_category_id
+            dataType: bigint
+            startValue: 100
+
+  - changeSet:
+      id: 2023-02-09--0001--category-table
+      author: maxix
+      changes:
+        - createTable:
+            tableName: t_category
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  defaultValueSequenceNext: seq_category_id
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_category
+              - column:
+                  name: title
+                  type: varchar(150)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 2023-02-09--0001--category-ux-title
+      author: maxix
+      changes:
+        - createIndex:
+            columns:
+              - column:
+                  name: title
+            unique: true
+            indexName: ux_category_title
+            tableName: t_category
